@@ -1,6 +1,6 @@
 'use client';
 
-import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
+import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
 
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 
@@ -22,11 +22,11 @@ export default function RatingChart({ vote_average, vote_count }: { vote_average
   const endAngle = (chartData[0].rating / maxValue) * 360;
 
   return (
-    <ChartContainer config={chartConfig} className="w-full flex">
-      <RadialBarChart data={chartData} startAngle={90} endAngle={90 - endAngle} innerRadius='50%' outerRadius='70%'>
-        <PolarGrid gridType='circle' radialLines={false} stroke='none' className='first:fill-muted last:fill-background' />
+    <ChartContainer config={chartConfig} className="p-0 relative -left-[100px] -top-[15px] -mb-[50px]">
+      <RadialBarChart data={chartData} startAngle={90} endAngle={90 - endAngle} innerRadius='50%' outerRadius='70%' className='w-full'>
+        <PolarGrid gridType='circle' radialLines={false} stroke='none' className='first:fill-muted last:fill-background w-full' />
         <RadialBar dataKey='rating' data={[chartData[0]]} fill={chartData[0].fill} background cornerRadius={10} />
-        <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+        <PolarRadiusAxis tick={false} tickLine={false} axisLine={false} className='w-full'>
           <Label
             content={({ viewBox }) => {
               if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {

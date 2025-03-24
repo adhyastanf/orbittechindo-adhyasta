@@ -69,7 +69,7 @@ function MovieDetails({ movie }: { movie: Movie }) {
         <p className='text-xl md:text-2xl lg:text-3xl text-gray-300'>( {releaseYear} )</p>
       </div>
 
-      <div className='mt-6 w-[350px]'>
+      <div className='w-[300px]'>
         <RatingChart vote_average={movie.vote_average} vote_count={movie.vote_count} />
       </div>
 
