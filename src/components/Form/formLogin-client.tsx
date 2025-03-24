@@ -1,12 +1,14 @@
 'use client';
 
-import { loginAction } from '@/app/actions/loginAction';
 import CustomForm from '@/components/Form/CustomForm';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { fetchLogin } from '@/lib/services';
 import { loginSchema } from '@/lib/validation';
 import { useAuthStore } from '@/stores/auth-store';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
+import { setCookie } from 'cookies-next/client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FieldValues, Path, useForm } from 'react-hook-form';
@@ -34,24 +36,36 @@ export default function FormLogin() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const response = await loginAction(data);
-
-    if (response.success) {
+    const { email, password } = data;
+    try {
+      const response = await fetchLogin(email, password);
+      if (!response || !response.user) {
+        throw new Error(response.message || 'Invalid response from server');
+      }
+      setCookie('tmdb_api_key',response.token)
       setUser(response.user.email);
       toast({
         title: 'Success',
         description: 'Login successful!',
         variant: 'default',
       });
-
       router.push('/');
-    } else {
-      toast({
-        title: 'Error',
-        description: response.message,
-        variant: 'destructive',
-      });
+    } catch (err) {
+      console.log(err)
+      let errorMessage = 'Something went wrong. Please try again.';
+    
+    if (err instanceof AxiosError) {
+      errorMessage = err.response?.data?.message || errorMessage;
+    } else if (err instanceof Error) {
+      errorMessage = err.message;
     }
+
+    toast({
+      title: 'Error',
+      description: errorMessage,
+      variant: 'destructive',
+    });
+  }
   };
 
   const fieldsList: FieldConfig<LoginFormData>[] = [

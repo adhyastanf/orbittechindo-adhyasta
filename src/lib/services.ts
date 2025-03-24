@@ -3,11 +3,12 @@ import axios from 'axios';
 
 const instance = axios.create({
   baseURL: 'https://api.themoviedb.org/3',
+  headers : {
+    Accept: 'application/json',
+  }
 });
 
 const BASE_URL_TMDB = 'https://api.themoviedb.org/3';
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
 export async function fetchTrending() {
   const token = await getAuthToken();
@@ -70,7 +71,7 @@ export async function fetchLogin(email: string, password: string) {
     password,
   };
 
-  const res = await axios.post(BASE_URL.concat('/api/auth/login'), body);
+  const res = await axios.post('/api/auth/login', body);
   return res.data;
 }
 
@@ -81,7 +82,7 @@ export async function fetchRegister(name: string, email: string, password: strin
     password,
   };
 
-  const res = await axios.post(BASE_URL.concat('/api/auth/register'), body);
+  const res = await axios.post('/api/auth/register', body);
   return res.data;
 }
 

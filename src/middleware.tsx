@@ -1,11 +1,9 @@
-import { NextResponse, NextRequest } from 'next/server';
-import { getCookie } from 'cookies-next/server';
-import { fetchValidationKey } from './lib/services';
 import { deleteCookie } from 'cookies-next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { fetchValidationKey } from './lib/services';
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-  const token = await getCookie('tmdb_api_key', { res, req });
+  const token = req.cookies.get('tmdb_api_key')?.value
 
   const isAuthRoute = req.nextUrl.pathname.startsWith('/auth');
 

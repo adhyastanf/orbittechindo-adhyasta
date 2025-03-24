@@ -1,11 +1,12 @@
 'use client';
 
-import { registerAction } from '@/app/actions/registerAction';
 import CustomForm from '@/components/Form/CustomForm';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { fetchRegister } from '@/lib/services';
 import { registerSchema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FieldValues, Path, useForm } from 'react-hook-form';
@@ -34,19 +35,32 @@ export default function FormRegister() {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    const response = await registerAction(data);
+    const { name, email, password } = data;
 
-    if (response.success) {
+    try {
+      const response = await fetchRegister(name, email, password);
+      if (!response || !response.user) {
+        throw new Error(response.message || 'Invalid response from server');
+      }
       toast({
         title: 'Success',
-        description: 'Registration Successful!',
+        description: 'Registration successful!',
         variant: 'default',
       });
       router.push('/auth/login');
-    } else {
+    } catch (err) {
+      console.log(err);
+      let errorMessage = 'Something went wrong. Please try again.';
+
+      if (err instanceof AxiosError) {
+        errorMessage = err.response?.data?.message || errorMessage;
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
       toast({
         title: 'Error',
-        description: response.message,
+        description: errorMessage,
         variant: 'destructive',
       });
     }
@@ -63,7 +77,7 @@ export default function FormRegister() {
     <Form {...form}>
       <CustomForm form={form} fields={fieldsList} onSubmit={onSubmit} loading={form.formState.isSubmitting} />
       <p className='text-sm text-gray-600 mt-4 text-center'>
-        Sudah punya akun? {' '}
+        Sudah punya akun?{' '}
         <Link href='/auth/login' className='text-blue-500 hover:text-blue-600 font-semibold cursor-pointer transition'>
           Sign In
         </Link>
