@@ -1,4 +1,3 @@
-import { deleteCookie } from 'cookies-next/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchValidationKey } from './lib/services';
 
