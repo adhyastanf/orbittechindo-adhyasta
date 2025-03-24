@@ -38,7 +38,7 @@ export default function FormRegister() {
     const { name, email, password } = data;
 
     try {
-      const response = await fetchRegister(name, email, password);
+      await fetchRegister(name, email, password);
       // if (!response || !response.user) {
       //   throw new Error(response.message || 'Invalid response from server');
       // }
