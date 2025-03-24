@@ -39,17 +39,16 @@ export default function FormRegister() {
 
     try {
       const response = await fetchRegister(name, email, password);
-      if (!response || !response.user) {
-        throw new Error(response.message || 'Invalid response from server');
-      }
+      // if (!response || !response.user) {
+      //   throw new Error(response.message || 'Invalid response from server');
+      // }
+      router.push('/auth/login');
       toast({
         title: 'Success',
         description: 'Registration successful!',
         variant: 'default',
       });
-      router.push('/auth/login');
     } catch (err) {
-      console.log(err);
       let errorMessage = 'Something went wrong. Please try again.';
 
       if (err instanceof AxiosError) {

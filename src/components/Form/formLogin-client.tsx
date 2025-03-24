@@ -44,12 +44,12 @@ export default function FormLogin() {
       }
       setCookie('tmdb_api_key',response.token)
       setUser(response.user.email);
+      router.push('/');
       toast({
         title: 'Success',
         description: 'Login successful!',
         variant: 'default',
       });
-      router.push('/');
     } catch (err) {
       console.log(err)
       let errorMessage = 'Something went wrong. Please try again.';
