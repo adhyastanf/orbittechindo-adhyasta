@@ -10,6 +10,8 @@ const instance = axios.create({
 
 const BASE_URL_TMDB = 'https://api.themoviedb.org/3';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
 export async function fetchTrending() {
   const token = await getAuthToken();
   const headers = {
