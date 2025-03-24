@@ -1,13 +1,13 @@
 'use client';
 
-import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
+import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
 
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 
 export default function RatingChart({ vote_average, vote_count }: { vote_average: number; vote_count: number }) {
   const maxValue = 10;
   const chartData = [
-    { browser: 'safari', rating: vote_average, fill: 'hsl(var(--chart-2))' }, // Misal 75%
+    { browser: 'safari', rating: vote_average, fill: 'hsl(var(--chart-2))' },
   ];
 
   const chartConfig: ChartConfig = {
